@@ -2,6 +2,8 @@
 #include <exception>
 #include <iostream>
 
+#include "Util.h"
+
 #define IDC_MAIN_EDIT	101
 #define IDC_MAIN_BUTTON 102
 
@@ -130,23 +132,41 @@ namespace DirContentViewer
 		}
 	}
 
-	
-	static wchar_t *CharToWChar(const char *text)
+	static void ReplaceUnprintable(wchar_t replacement, wchar_t *string, size_t size)
 	{
-		size_t size = strlen(text) + 1;
-		wchar_t* wa = new wchar_t[size];
-		size_t unused = 0;
-		mbstowcs_s(&unused, wa, size, text, size);
-		return wa;
+		for (size_t i = 0; i < size; i++)
+		{
+			if (!iswprint((wint_t)string[i]) || string[i] == L'\0')
+			{
+				string[i] = replacement;
+			}
+		}
+	}
+
+	static void ReplaceZeros(char replacement, char *string, size_t size)
+	{
+		for (size_t i = 0; i < size; i++)
+		{
+			if (string[i] == '\0')
+			{
+				string[i] = replacement;
+			}
+		}
 	}
 
 	void WindowWIN32::UpdateContent()
 	{
 		char *content = new char[m_ContentProvider->GetSize() + 1];
 		m_ContentProvider->Read(0, m_ContentProvider->GetSize(), content);
+
 		content[m_ContentProvider->GetSize()] = '\0';
 
+		ReplaceZeros('0', content, m_ContentProvider->GetSize());
+
 		wchar_t *wcontent = CharToWChar(content);
+
+		ReplaceUnprintable(L'#', wcontent, wcslen(wcontent));
+
 		SetWindowTextW(m_EditHandle, wcontent);
 
 		delete[] wcontent;

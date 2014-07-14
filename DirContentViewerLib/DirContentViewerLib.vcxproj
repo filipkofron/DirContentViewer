@@ -141,6 +141,7 @@
     <ClInclude Include="FileContentProvider.h" />
     <ClInclude Include="IFileProvider.h" />
     <ClInclude Include="IFileReceiver.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="WindowWIN32.h" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
     <ClCompile Include="DirContentViewer.cpp" />
     <ClCompile Include="DirectoryFileProvider.cpp" />
     <ClCompile Include="FileContentProvider.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="WindowWIN32.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
