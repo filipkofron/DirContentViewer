@@ -157,6 +157,19 @@ namespace DirContentViewer
 	void WindowWIN32::UpdateContent()
 	{
 		char *content = new char[m_ContentProvider->GetSize() + 1];
+
+		MEMORYSTATUSEX statex;
+		statex.dwLength = sizeof (statex);
+		GlobalMemoryStatusEx(&statex);
+
+		if (statex.ullAvailPhys / 3 < m_ContentProvider->GetSize())
+		{
+			MessageBox(NULL, L"Files content too large, cannot fit to RAM!", L"Error!",
+				MB_ICONEXCLAMATION | MB_OK);
+
+			throw std::exception("Files content too large, cannot fit to RAM.");
+		}
+
 		m_ContentProvider->Read(0, m_ContentProvider->GetSize(), content);
 
 		content[m_ContentProvider->GetSize()] = '\0';
